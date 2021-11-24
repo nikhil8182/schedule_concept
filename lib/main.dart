@@ -389,7 +389,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+String dropdownValue = 'One';
+String drop ;
 
+List data = [];
+List<String> data1 =["Bulb_Button_Admin_Room"];
 void main() => runApp(const MyApp());
 
 /// This is the main application widget.
@@ -495,44 +499,48 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   //     ],
   //   );
   ///
-  String dropdownValue = 'One';
-  String drop = 'Outside_Bulb_Button_Admin_Room';
 
-  List data = [];
-  List<String> data1 =["Outside_Bulb_Button_Admin_Room"];
   //var data = " ";
 
-  String ipAddress = "54.202.0.170";
 
+  //String ipAddress = "54.202.0.170";
+  String ipAddress = "o.j:8000";
   time() async {
     //ignore:avoid_print
     //print("time is inside");
 
-    final response = await http.get(Uri.parse("http://$ipAddress/key"));
-    var fetchdata = jsonDecode(response.body);
-    return fetchdata;
+
+    // return fetchdata;
     //ignore:avoid_print
     //print("fetchdata is $fetchdata");
 
   }
 
   storeData() async {
-    data = await time();
+    final response = await http.get(Uri.parse("http://$ipAddress/key"));
+
+    data =  jsonDecode(response.body);
     //ignore:avoid_print
     //print("data is $data");
-    data1.clear();
-    for(int i = 0; i<data.length ; i++){
-      data1.add(data[i]);
-    }
-    //ignore:avoid_print
-    print("data1 is $data1");
+    setState(() {
+      data1.clear();
+      for(int i = 0; i<data.length ; i++){
+        //ignore:avoid_print
+        print(data[i]);
+         data1.add(data[i]);
+      }
+      //ignore:avoid_print
+      print("data1 is $data1");
+    });
+
   }
 
   @override
   void initState() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      storeData();
-    });
+    // Timer.periodic(const Duration(seconds: 1), (timer) {
+    //   storeData();
+    // });
+    storeData();
     // time();
   }
 
@@ -570,6 +578,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           height: 100,
         ),
         DropdownButton<String>(
+          hint:const Text("Select something"),
           value: drop,
           icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
