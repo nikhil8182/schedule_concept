@@ -10,11 +10,12 @@ List data = [];
 List<String> data1 = ["Bulb_Button_Admin_Room"];
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 
 //completed schedule concept on 25-nov-2021
+//complete post method concept with date and time picker
 
 Future<Album> createAlbum(
     String time, String date, String device, bool state) async {
@@ -80,7 +81,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -117,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
   storeData() async {
     final response = await http.get(Uri.parse("http://$ipAddress/key"));
     data = jsonDecode(response.body);
+    //important to set  this in setState
     setState(() {
       data1.clear();
       for (int i = 0; i < data.length; i++) {
@@ -168,9 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),
-        child: (_futureAlbum == null)
-            ? buildColumn(context)
-            : buildFutureBuilder(context),
+        child: (_futureAlbum == null) ? buildColumn(context) : buildFutureBuilder(context),
+        //child: buildColumn(context) ,
       ),
     );
   }
@@ -250,6 +251,8 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             setState(() {
               _futureAlbum = createAlbum(dumTime.toString(), combination, val, isSwitched);
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => const SecondPage()));
             });
           },
           child: const Text('Create Data'),
@@ -257,6 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+
 
   FutureBuilder<Album> buildFutureBuilder(BuildContext context) {
     return FutureBuilder<Album>(
@@ -291,10 +295,11 @@ class _MyHomePageState extends State<MyHomePage> {
         //selectedTime = timeOfDay;
         dummyTime = timeOfDay;
         dumTime = dummyTime.toString().substring(10,15);
+
         // //ignore:avoid_print
         // print("ferosh  is $ferosh");
         //ignore:avoid_print
-        print("dumm is ${dummyTime}");
+        //print("dumm is ${dummyTime}");
         //dumTime = "${dummyTime.hour}:${dummyTime.minute}";
         //ignore:avoid_print
         print("dumTime is $dumTime");
@@ -303,3 +308,68 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
+//
+// class SecondPage extends StatefulWidget {
+//   const SecondPage({Key key}) : super(key: key);
+//
+//   @override
+//   _SecondPageState createState() => _SecondPageState();
+// }
+//
+// class _SecondPageState extends State<SecondPage> {
+//
+//   Future<Album> albs;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text("Post Method"),
+//       ),
+//       body: FutureBuilder<Album>(
+//         future: albs,
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             return Column(
+//               children: [
+//                 Text(snapshot.data.time),
+//                 Text(snapshot.data.date),
+//                 Text(snapshot.data.device),
+//                 Text(snapshot.data.state.toString()),
+//               ],
+//             );
+//           } else if (snapshot.hasError) {
+//             return Text('${snapshot.error}');
+//           }
+//
+//           return const CircularProgressIndicator();
+//         },
+//       )
+//     );
+//   }
+//
+//   FutureBuilder<Album> buildFutureBuilder(BuildContext context) {
+//     return FutureBuilder<Album>(
+//       future: albs,
+//       builder: (context, snapshot) {
+//         if (snapshot.hasData) {
+//           return Column(
+//             children: [
+//               Text(snapshot.data.time),
+//               Text(snapshot.data.date),
+//               Text(snapshot.data.device),
+//               Text(snapshot.data.state.toString()),
+//             ],
+//           );
+//         } else if (snapshot.hasError) {
+//           return Text('${snapshot.error}');
+//         }
+//
+//         return const CircularProgressIndicator();
+//       },
+//     );
+//   }
+//
+//
+// }
+//
